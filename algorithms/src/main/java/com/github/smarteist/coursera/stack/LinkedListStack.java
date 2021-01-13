@@ -21,6 +21,11 @@ public class LinkedListStack<T> {
         first.next = oldFirst;
     }
 
+
+    public T peek() {
+        return first.item;
+    }
+
     public T pop() {
         T item = first.item;
         first = first.next;
