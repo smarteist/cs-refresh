@@ -12,8 +12,7 @@ public class ShuntingYardAlgorithm {
                 else if (token.equals("-")) {
                     Double pop = vals.pop();
                     vals.push(vals.pop() - pop);
-                }
-                else if (token.equals("/")) {
+                } else if (token.equals("/")) {
                     Double pop = vals.pop();
                     vals.push(vals.pop() / pop);
                 } else if (token.equals("*")) vals.push(vals.pop() * vals.pop());
@@ -26,6 +25,7 @@ public class ShuntingYardAlgorithm {
     }
 
     public static String infixToPostfix(String infix) {
+        infix = infix.replaceAll("\\s", "");
         String postfix = "";
         LinkedListStack<Character> operator = new LinkedListStack<>();
         char popped;
@@ -46,7 +46,32 @@ public class ShuntingYardAlgorithm {
         // pop any remaining operator
         while (!operator.isEmpty())
             postfix += operator.pop();
-        return postfix.replaceAll("\\s", "");
+        return postfix;
+    }
+
+    public static String infixToPrefix(String infix) {
+        infix = infix.replaceAll("\\s", "");
+        String prefix = "";
+        LinkedListStack<Character> operator = new LinkedListStack<>();
+        char popped;
+
+        for (int i = infix.length() - 1; i >= 0; i--) {
+            char get = infix.charAt(i);
+            if (!isOperator(get))
+                prefix = prefix + get;
+            else if (get == '(') {
+                while ((popped = operator.pop()) != ')')
+                    prefix = prefix + popped;
+            } else {
+                while (!operator.isEmpty() && get != ')' && precedence(operator.peek()) >= precedence(get))
+                    prefix = prefix + operator.pop();
+                operator.push(get);
+            }
+        }
+        // pop any remaining operator
+        while (!operator.isEmpty())
+            prefix = prefix + operator.pop();
+        return prefix;
     }
 
     private static boolean isOperator(char i) {
