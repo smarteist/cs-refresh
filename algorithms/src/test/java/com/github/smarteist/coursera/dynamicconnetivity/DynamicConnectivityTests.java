@@ -1,9 +1,12 @@
 package com.github.smarteist.coursera.dynamicconnetivity;
 
+import com.github.smarteist.MyBenchmark;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -30,13 +33,14 @@ public class DynamicConnectivityTests {
 
     @Test
     public void union() {
+        MyBenchmark benchmark = new MyBenchmark();
         for (UnionFind unionFind : unionFinds) {
-            long time = System.nanoTime();
+            benchmark.start();
             assertFalse(unionFind.connected(1, 2));
             unionFind.union(1, 2);
             assertTrue(unionFind.connected(1, 2));
             // Here we see the difference in action!
-            System.out.printf("Test done in (%d Nano Seconds) for %s\n", System.nanoTime() - time, unionFind.getClass());
+            System.out.printf("Test done in (%d Nano Seconds) for %s\n", benchmark.stop(), unionFind.getClass());
         }
     }
 }
